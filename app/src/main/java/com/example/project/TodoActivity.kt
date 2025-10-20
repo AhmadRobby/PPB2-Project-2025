@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.project.adapter.TodoAdapter
 import com.example.project.databinding.ActivityTodoBinding
 import com.example.project.databinding.TestingBinding
@@ -41,24 +42,9 @@ class TodoActivity : AppCompatActivity() {
         }
     }
     private fun setupRecyclerView() {
-        TodoAdapter = TodoAdapter (mutableListOf(), object : TodoAdapter.TodoItemEvents {
-            override fun onDelete(todo: Todo) {
-                val builder = AlertDialog.Builder(this@TodoActivity)
-                builder.setTitle("Konfirmasi hapus data")
-                builder.setMessege("Hapus ya?")
-
-                builder.setPositiveButton("Iya") { dialog, _ ->
-                    lifecycleScope.launch {
-                        try {
-                            todoUseCase.deleteTodo(todo.id)
-                        } catch (exc: Exception) {
-                            displayMessege("Gagal Hapus Data" : ${exc.message})
-                        }
-                    }
-
-                }
-            }
-        })
+        TodoAdapter= TodoAdapter(mutableListOf())
+        activityBinding.container.adapter = TodoAdapter
+        activityBinding.container.layoutManager= LinearLayoutManager(this)
     }
 
     fun initializeData() {
